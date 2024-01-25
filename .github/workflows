@@ -1,9 +1,0 @@
-name: Spin up a runner
-on:
-  - push
-jobs:
-  spin-up-a-virtual-machine:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Execute command on server
-        run: ls -al
