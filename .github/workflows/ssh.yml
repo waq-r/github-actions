@@ -17,6 +17,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ls ~/.ssh -al
+          - echo "$SSH_PRIVATE_KEY"
           eval `ssh-agent -s`
           echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r" | ssh-add - > /dev/null
       #   run: |
