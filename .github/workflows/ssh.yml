@@ -30,5 +30,8 @@ jobs:
 
       - name: SSH into remote Server and execute eommand
         run: |
+          cd ~/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > gh.pem
+          chmod 644 gh.pem
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i gh.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
