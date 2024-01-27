@@ -11,7 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -o StrictHostKeyChecking=no -i <(echo "${{ secrets.PRIVATE_KEY }}") -o IdentitiesOnly=yes -o PreferredAuthentications=publickey ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
