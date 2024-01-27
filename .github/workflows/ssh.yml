@@ -34,4 +34,4 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
