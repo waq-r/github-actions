@@ -22,6 +22,7 @@ jobs:
           ls ~/.ssh -al
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+
       #   run: |
       #     echo "${{ secrets.PASSPHRASE }}" | \
       #     mkdir -p ~/.ssh
@@ -30,7 +31,7 @@ jobs:
       #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       #     chmod 644 ~/.ssh/known_hosts
 
-      # - name: SSH into remote Server and execute eommand
-      #   run: |
-      #     echo "${{ secrets.PASSPHRASE }}" | \
-      #     ssh -i ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+      - name: SSH into remote Server and execute eommand
+        run: |
+          echo "${{ secrets.PASSPHRASE }}" | \
+          ssh -i ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
