@@ -13,8 +13,10 @@ jobs:
     steps:
       - name: Set Up SSH
         run: |
+          echo "${{ secrets.PASSPHRASE }}" | \
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          (echo "${SSH_PRIVATE_KEY}") > ~/.ssh/id_rsa
+          ssh-add <(echo "${SSH_PRIVATE_KEY}")
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
