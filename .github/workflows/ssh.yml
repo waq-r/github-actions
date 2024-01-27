@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
           mkdir -p ~/.ssh
-          (echo "${SSH_PRIVATE_KEY) > ~/.ssh/id_rsa
+          (echo "${SSH_PRIVATE_KEY}") > ~/.ssh/id_rsa
           eval `ssh-agent -s`
           ssh-add <(echo "${SSH_PRIVATE_KEY}")
           chmod 600 ~/.ssh/id_rsa
