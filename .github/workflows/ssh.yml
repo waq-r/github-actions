@@ -1,0 +1,17 @@
+name: SSH into remote eerver
+
+on:
+  workflow_run:
+    workflows: ["Spin up a runner"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into remote Server and execute eommand
+        run: |
+          echo "${{ secrets.PASSPHRASE }}" | \
+          ssh -o StrictHostKeyChecking=no -i <(echo "${{ secrets.PRIVATE_KEY }}") -o IdentitiesOnly=yes -o PreferredAuthentications=publickey ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
