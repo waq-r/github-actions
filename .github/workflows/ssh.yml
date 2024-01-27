@@ -32,6 +32,6 @@ jobs:
         run: |
           cd ~/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > gh.pem
-          chmod 644 gh.pem
+          chmod 600 gh.pem
           echo "${{ secrets.PASSPHRASE }}" | \
           ssh -i gh.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
