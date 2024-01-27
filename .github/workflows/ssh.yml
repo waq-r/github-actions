@@ -15,12 +15,12 @@ jobs:
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
           mkdir -p ~/.ssh
-          (echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r") > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add <(echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r")
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
