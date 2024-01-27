@@ -17,9 +17,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ls ~/.ssh -al
-          echo "$SSH_PRIVATE_KEY"  | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ls ~/.ssh -al
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
@@ -34,4 +31,4 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i echo ("$SSH_PRIVATE_KEY"  | base64 --decode) ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
