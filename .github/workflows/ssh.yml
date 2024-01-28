@@ -19,7 +19,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSL_USER }}
         key: ${{ secrets.PRIVATE_KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }}
+        passphrase: ${{ secrets.SSH_PASS }}
         script: whoami
 
   
