@@ -20,7 +20,7 @@ jobs:
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
     - name: executing remote ssh commands using pem
-      uses: appleboy/ssh-action@v0.1.4
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSL_USER }}
