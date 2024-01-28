@@ -31,7 +31,8 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           cd ~/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > gh.pem
-          chmod 600 gh.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh-keygen -l -f key.pem
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i gh.pem ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "Hello from GitHub Actions!"'
+          ssh -i key.pem  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
