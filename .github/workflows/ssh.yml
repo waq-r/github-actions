@@ -8,25 +8,19 @@ name: SSH into remote server
 on:
   - push
 jobs:
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  deploy-frontend:
+    runs-on: ubuntu-latest #using latest ubuntu to build application
     steps:
-    - name: Set Up SSH
-      run: |
-          mkdir -p ~/.ssh
-          ls ~/.ssh -al
-          ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-    - name: executing remote ssh commands using pem
+    - name: executing remote ssh commands using ssh key
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSL_USER }}
+        username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.PRIVATE_KEY }}
-        passphrase: ${{ secrets.SSH_PASS }}
-        script: whoami
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: |
+            cd ~/ustream
+            pm2 status
 
   
       # - name: Set Up SSH
