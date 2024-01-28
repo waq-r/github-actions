@@ -16,7 +16,7 @@ jobs:
     - name: executing remote ssh commands using pem
       uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.SSL_HOST }}
+        host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSL_USER }}
         key: ${{ secrets.PRIVATE_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
