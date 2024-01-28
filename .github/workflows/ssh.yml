@@ -32,7 +32,6 @@ jobs:
         run: |
           cd ~/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
-          vim key.pem
           chmod 400 key.pem
           ssh-keygen -f key.pem -y > key.pub
           ssh-keygen -l -f key.pub
