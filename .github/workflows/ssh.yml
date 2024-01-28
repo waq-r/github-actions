@@ -7,38 +7,48 @@ name: SSH into remote server
 #       - completed
 on:
   - push
-
 jobs:
-  deploy:
+
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Set Up SSH
-        run: |
-          mkdir -p ~/.ssh
-          ls ~/.ssh -al
-          ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+    - name: executing remote ssh commands using pem
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSL_HOST }}
+        username: ${{ secrets.SSL_USER }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: whoami
 
+  
+      # - name: Set Up SSH
       #   run: |
-      #     echo "${{ secrets.PASSPHRASE }}" | \
       #     mkdir -p ~/.ssh
-      #     eval `ssh-agent -s`
-      #     ssh-add <(echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r")
+      #     ls ~/.ssh -al
       #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       #     chmod 644 ~/.ssh/known_hosts
 
-      - name: Create SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-        run: |
-          cd ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
-          sudo chmod 400 ~/.ssh/key.pem
-          ssh-keygen -f key.pem -y > ~/.ssh/key.pub
-          ssh-keygen -l -f ~/.ssh/key.pub
+      # #   run: |
+      # #     echo "${{ secrets.PASSPHRASE }}" | \
+      # #     mkdir -p ~/.ssh
+      # #     eval `ssh-agent -s`
+      # #     ssh-add <(echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r")
+      # #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+      # #     chmod 644 ~/.ssh/known_hosts
 
-      - name: SSH into remote Server and execute eommand
-        run: |
-          echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i ~/.ssh/key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+      # - name: Create SSH key
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+      #   run: |
+      #     cd ~/.ssh
+      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
+      #     sudo chmod 400 ~/.ssh/key.pem
+      #     ssh-keygen -f key.pem -y > ~/.ssh/key.pub
+      #     ssh-keygen -l -f ~/.ssh/key.pub
+
+      # - name: SSH into remote Server and execute eommand
+      #   run: |
+      #     echo "${{ secrets.PASSPHRASE }}" | \
+      #     ssh -i ~/.ssh/key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
