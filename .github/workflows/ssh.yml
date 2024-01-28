@@ -28,12 +28,16 @@ jobs:
       #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       #     chmod 644 ~/.ssh/known_hosts
 
+      - name: Create SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
+          sudo chmod 400 ~/.ssh/key.pem
+          ssh-keygen -f key.pem -y > ~/.ssh/key.pub
+          ssh-keygen -l -f ~/.ssh/key.pub
+
       - name: SSH into remote Server and execute eommand
         run: |
-          cd ~/
-          echo "$SSH_PRIVATE_KEY" > key.pem
-          chmod 400 key.pem
-          ssh-keygen -f key.pem -y > key.pub
-          ssh-keygen -l -f key.pub
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+          ssh -i ~/.ssh/key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
