@@ -31,7 +31,7 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           cd ~/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          echo "$SSH_PRIVATE_KEY" > key.pem
           chmod 400 key.pem
           ssh-keygen -f key.pem -y > key.pub
           ssh-keygen -l -f key.pub
