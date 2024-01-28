@@ -32,6 +32,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         run: |
+          touch ~/.ssh/key.pem
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
           sudo chmod 400 ~/.ssh/key.pem
           ssh-keygen -f key.pem -y > ~/.ssh/key.pub
