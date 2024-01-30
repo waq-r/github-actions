@@ -49,14 +49,14 @@ jobs:
           eval `ssh-agent -s`
           echo 'Add the PASS'
           echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
-          echo "create public key"
-          ssh-keygen -y -f ~/.ssh/private.key > ~/.ssh/public.key
           echo "create known_hosts"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           ls -al ~/
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
+          echo "create public key"
+          ssh-keygen -y -f ~/.ssh/private.key > ~/.ssh/public.key
 
       - name: SSH into remote Server and execute eommand
         run: |
