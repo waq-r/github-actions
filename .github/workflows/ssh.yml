@@ -55,8 +55,6 @@ jobs:
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
-          echo "create public key"
-          ssh-keygen -y -f ~/.ssh/private.key > ~/.ssh/public.key
 
       - name: SSH into remote Server and execute eommand
         run: |
