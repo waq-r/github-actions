@@ -49,9 +49,10 @@ jobs:
           ssh-keygen -f ~/.ssh/id_rsa -y > ~/.ssh/id_rsa.pub
           ssh-keygen -l -f ~/.ssh/id_rsa.pub
           ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-          ls -al ~/.ssh
-          echo "${{ secrets.PASSPHRASE }}" > ~/.passphrase && chmod +x ~/.passphrase
-          ls -al ~/
+          ls -altr ~/.ssh
+          echo "${{ secrets.PASSPHRASE }}" > ~/.passphrase
+          chmod 600 ~/.passphrase
+          ls -altr ~/
           cat id_rsa | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
           ssh-add -l
 
