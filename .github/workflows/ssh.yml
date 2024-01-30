@@ -11,44 +11,52 @@ jobs:
   deploy-frontend:
     runs-on: ubuntu-latest #using latest ubuntu to build application
     steps:
-    - name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        script: |
-            cd ~/ustream
-            pm2 status
+      # - name: executing remote ssh commands using ssh key
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USER }}
+      #     key: ${{ secrets.PRIVATE_KEY }}
+      #     passphrase: ${{ secrets.PASSPHRASE }}
+      #     script: |
+      #         cd ~/ustream
+      #         pm2 status
 
-  
       # - name: Set Up SSH
       #   run: |
       #     mkdir -p ~/.ssh
       #     ls ~/.ssh -al
       #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       #     chmod 644 ~/.ssh/known_hosts
-
-      # #   run: |
-      # #     echo "${{ secrets.PASSPHRASE }}" | \
-      # #     mkdir -p ~/.ssh
-      # #     eval `ssh-agent -s`
-      # #     ssh-add <(echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r")
-      # #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-      # #     chmod 644 ~/.ssh/known_hosts
-
-      # - name: Create SSH key
-      #   env:
-      #     SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-      #   run: |
-      #     cd ~/.ssh
-      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/key.pem
-      #     sudo chmod 400 ~/.ssh/key.pem
-      #     ssh-keygen -f key.pem -y > ~/.ssh/key.pub
-      #     ssh-keygen -l -f ~/.ssh/key.pub
-
-      # - name: SSH into remote Server and execute eommand
+      # - name: Execute command on server
       #   run: |
       #     echo "${{ secrets.PASSPHRASE }}" | \
-      #     ssh -i ~/.ssh/key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+      #     mkdir -p ~/.ssh
+      #     eval `ssh-agent -s`
+      #     ssh-add <(echo "${SSH_PRIVATE_KEY}" | base64 --decode | tr -d "\r")
+      #     ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+      #     chmod 644 ~/.ssh/known_hosts
+
+      - name: Add SSH key
+        # env:
+        #   SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+        run: |
+          mkdir -p ~/.ssh
+          ls ~/.ssh -al
+          chmod 644 ~/.ssh
+          cd ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          sudo chmod 400 ~/.ssh/id_rsa
+          ssh-keygen -f key.pem -y > ~/.ssh/id_rsa.pub
+          ssh-keygen -l -f ~/.ssh/id_rsa.pub
+          ls -al ~/.ssh
+          echo "${{ secrets.PASSPHRASE }}" > ~/.ssh/.passphrase && chmod +x ~/.ssh/.passphrase
+          ls -al ~/.ssh
+          eval `ssh-agent -s`
+          echo "$PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/.passphrase ssh-add - >/dev/null
+          ssh-add -l
+
+      - name: SSH into remote Server and execute eommand
+        run: |
+          echo "${{ secrets.PASSPHRASE }}" | \
+          ssh -i ~/.ssh/id_rsa  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
