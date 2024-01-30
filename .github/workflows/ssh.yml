@@ -48,7 +48,7 @@ jobs:
           echo 'Start the SSH agent'
           eval `ssh-agent -s`
           echo 'Add the PASS'
-          echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
+          echo "$PASSPHRASE" > ~/.passphrase && chmod 700 ~/.passphrase
           ls -al ~/
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
