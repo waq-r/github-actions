@@ -38,8 +38,8 @@ jobs:
       #     chmod 644 ~/.ssh/known_hosts
 
       - name: Add SSH key
-        # env:
-        #   SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+        env:
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
         run: |
           mkdir -p ~/.ssh
           ls ~/.ssh -al
@@ -59,4 +59,4 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          ssh -i ~/.ssh/id_rsa  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+          echo "$PRIVATE_KEY"  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
