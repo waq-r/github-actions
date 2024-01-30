@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo 'echo ${{secrets.PRIVATE_KEY}}' > ~/.ssh/private.key
+          echo "${{secrets.PRIVATE_KEY}}"" > ~/.ssh/private.key
           sudo chmod 400 ~/.ssh/private.key
           echo 'echo ${{secrets.PASSPHRASE}}' > ~/.ssh/passphrase && chmod 700 ~/.ssh/passphrase
           ls -al ~/.ssh
