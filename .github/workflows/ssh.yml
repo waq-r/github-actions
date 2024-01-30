@@ -51,12 +51,12 @@ jobs:
           echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
           ls -al ~/
           echo 'Add ssh key'
-          cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
+          cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
           ssh-add -l
 
       - name: SSH into remote Server and execute eommand
         run: |
           echo "SSH to remote server"
-          SSH -i ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          ssh -i ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           echo "Done"
           pwd
