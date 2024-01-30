@@ -45,8 +45,6 @@ jobs:
           sudo chmod 400 ~/.ssh/private.key
           echo 'echo ${{secrets.PASSPHRASE}}' > ~/.ssh/passphrase && chmod 700 ~/.ssh/passphrase
           ls -al ~/.ssh
-          echo 'Start the SSH agent'
-          eval `ssh-agent -s`
           echo "ssh auth socket: $SSH_AUTH_SOCK"
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           echo 'Add the PASS'
