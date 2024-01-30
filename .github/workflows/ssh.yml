@@ -42,13 +42,19 @@ jobs:
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
           PASSPHRASE: ${{secrets.PASSPHRASE}}
         run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$PRIVATE_KEY" > ~/.ssh/private.key
+          sudo chmod 400 ~/.ssh/private.key
+          echo 'echo ${{secrets.PASSPHRASE}}' > ~/.ssh/passphrase && chmod 700 ~/.ssh/passphrase
+          ls -al ~/.ssh
           echo 'Start the SSH agent'
           eval `ssh-agent -s`
-          echo 'Add the p'
-          echo "$PASSPHRASE" > ~/.passphrase && chmod 700 ~/.passphrase
+          echo 'Add the PASS'
+          echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
           ls -al ~/
           echo 'Add ssh key'
-          echo "$PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
+          cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
 
       # - name: SSH into remote Server and execute eommand
