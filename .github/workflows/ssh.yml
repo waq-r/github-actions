@@ -42,15 +42,7 @@ jobs:
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
           PASSPHRASE: ${{secrets.PASSPHRASE}}
         run: |
-          mkdir -p ~/.ssh
-          ls ~/.ssh -al
-          eval `ssh-agent -s`
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          sudo chmod 400 ~/.ssh/id_rsa
-          ssh-keygen -f ~/.ssh/id_rsa -y > ~/.ssh/id_rsa.pub
-          ssh-keygen -l -f ~/.ssh/id_rsa.pub
-          ssh-keyscan -H echo "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
-          ls -altr ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
           ls -altr ~/
           echo "$PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
@@ -59,4 +51,4 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          echo "$PRIVATE_KEY"  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+          echo -i "$PRIVATE_KEY"  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
