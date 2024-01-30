@@ -38,7 +38,10 @@ jobs:
       #     chmod 644 ~/.ssh/known_hosts
 
       - name: Add SSH key to agent
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
+          eval $(ssh-agent -s) && ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           echo "${{secrets.PRIVATE_KEY}}" > ~/.ssh/private.key
@@ -55,6 +58,11 @@ jobs:
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
+
+      - name: SSH into remote Server and execute eommand
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
           echo "SSH to remote server"
           ssh -tt -i ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           echo "Done"
