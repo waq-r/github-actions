@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "$PRIVATE_KEY" > ~/.ssh/private.key
+          echo 'echo ${{secrets.PRIVATE_KEY}}' > ~/.ssh/private.key
           sudo chmod 400 ~/.ssh/private.key
           echo 'echo ${{secrets.PASSPHRASE}}' > ~/.ssh/passphrase && chmod 700 ~/.ssh/passphrase
           ls -al ~/.ssh
@@ -60,4 +60,6 @@ jobs:
       - name: SSH into remote Server and execute eommand
         run: |
           echo "${{ secrets.PASSPHRASE }}" | \
-          echo -i  ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} whoami
+          echo -i  ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          echo "Done"
+          pwd
