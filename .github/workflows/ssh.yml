@@ -41,19 +41,15 @@ jobs:
         # env:
         #   SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
         run: |
-          mkdir -p ~/.ssh
-          ls ~/.ssh -al
-          chmod 644 ~/.ssh
-          cd ~/.ssh
+          eval `ssh-agent -s`
           echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
           sudo chmod 400 ~/.ssh/id_rsa
-          ssh-keygen -f key.pem -y > ~/.ssh/id_rsa.pub
+          ssh-keygen -f ~/.ssh/id_rsa -y > ~/.ssh/id_rsa.pub
           ssh-keygen -l -f ~/.ssh/id_rsa.pub
           ls -al ~/.ssh
-          echo "${{ secrets.PASSPHRASE }}" > ~/.ssh/.passphrase && chmod +x ~/.ssh/.passphrase
-          ls -al ~/.ssh
-          eval `ssh-agent -s`
-          echo "$PRIVATE_KEY" | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/.passphrase ssh-add - >/dev/null
+          echo "${{ secrets.PASSPHRASE }}" > ~/.passphrase && chmod +x ~/.passphrase
+          ls -al ~/
+          cat id_rsa | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.passphrase ssh-add - >/dev/null
           ssh-add -l
 
       - name: SSH into remote Server and execute eommand
