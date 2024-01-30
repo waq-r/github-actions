@@ -47,6 +47,8 @@ jobs:
           ls -al ~/.ssh
           echo 'Start the SSH agent'
           eval `ssh-agent -s`
+          echo "ssh auth socket: $SSH_AUTH_SOCK"
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           echo 'Add the PASS'
           echo "$PASSPHRASE" > ~/.passphrase && chmod +x ~/.passphrase
           echo "create known_hosts"
