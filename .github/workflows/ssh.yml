@@ -56,14 +56,18 @@ jobs:
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
-          echo "switch display to ubuntu default tty1"
-          export DISPLAY=:0.0
+          echo "current tty1"
+          tty
+          echo $DISPLAY
           echo "Done"
       - name: SSH into remote Server and execute eommand
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
+          echo "Running on: "
+          DISPLAY=:0
           echo "SSH to remote server"
+          echo $DISPLAY
           ssh -tt -i ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           echo "Done"
           pwd
