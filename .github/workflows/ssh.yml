@@ -57,7 +57,9 @@ jobs:
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
           echo "current tty1"
+          DISPLAY=:0
           echo $DISPLAY
+          echo tty
           echo "Done"
       - name: SSH into remote Server and execute eommand
         env:
@@ -71,3 +73,4 @@ jobs:
           echo "Done"
           pwd
           exit
+          echo "all done"
