@@ -53,20 +53,19 @@ jobs:
           echo "create known_hosts"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           ls -al ~/
+          echo "current tty1"
+          echo $DISPLAY
+          echo $0
           echo 'Add ssh key'
           cat ~/.ssh/private.key | tr -d '\r' | DISPLAY=None SSH_ASKPASS=~/.ssh/passphrase ssh-add - >/dev/null
           ssh-add -l
-          echo "current tty1"
-          DISPLAY=:0
-          echo $DISPLAY
-          echo tty
           echo "Done"
       - name: SSH into remote Server and execute eommand
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           echo "Running on: "
-          DISPLAY=:0
+          DISPLAY=:0.0
           echo "SSH to remote server"
           echo $DISPLAY
           ssh -tt -i ~/.ssh/private.key  -o "StrictHostKeyChecking no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
